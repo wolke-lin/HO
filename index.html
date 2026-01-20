@@ -1,97 +1,86 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Countdown</title>
-<style>
-  :root{
-    --bg:#CDE1EB;
-    --gold:#FFC000;
-    --light:#F7F7F7;
-    --text:#183A68;
-  }
-
-  /* 整體背景與版心 */
-  body{
-    margin:0;
-    background-color:var(--bg);
-    font-family: Arial, Helvetica, sans-serif;
-    /* 讓區塊在頁面垂直置中，可依需求移除 */
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-
-  /* 外框：用 grid 精準排版 */
-  .wrap{
-    /* 兩欄：左邊是大數字，右邊是 DAYS/TO GO 垂直堆疊 */
-    display:grid;
-    grid-template-columns:auto auto;
-    column-gap:0.5cm;               /* 與主倒數數字右邊 0.5cm */
-    align-items:start;               /* 讓右側頂端對齊，再做微調 */
-    /* 讓整塊靠左且與下方說明有 0.3cm 的左凸排 */
-    margin-left:0.3cm;               /* 與補充說明文字左邊凸排 0.3cm */
-  }
-
-  /* 主倒數數字 */
-  #days-number{
-    font-size:70px;                  /* 規格：70px */
-    line-height:1;
-    font-weight:700;
-    color:var(--gold);
-  }
-
-  /* 右側兩行標籤容器：用 column 垂直堆疊 */
-  .labels{
-    display:flex;
-    flex-direction:column;
-    /* 整體上移 0.1cm：符合「DAYS 在主數字上方 0.1cm」 */
-    transform:translateY(-0.1cm);
-  }
-
-  /* DAYS 與 TO GO 共用樣式 */
-  .label{
-    font-size:28px;                  /* 規格：28px */
-    line-height:1;
-    text-align:center;               /* 置中，確保 TO GO 與 DAYS 中線一致 */
-    white-space:nowrap;
-  }
-
-  /* 兩個顏色分別符合規格 */
-  #days-label{ color:var(--gold); }
-  #to-go     { color:var(--light); }
-
-  /* TO GO 與 DAYS 的垂直距離 0.3cm（約 11px） */
-  #to-go{ margin-top:0.3cm; }
-
-  /* 說明文字（兩句合併成一行，如需求） */
-  .subtext{
-    margin-top:15px;                 /* 規格：約 0.4cm ≈ 15px */
-    color:var(--text);
-    font-size:16px;
-    text-align:center;
-  }
-
-  /* 讓整個區塊（主體＋說明）有固定寬度，利於 SharePoint 內嵌 */
-  .container{
-    width: max-content;              /* 跟內容寬度一致 */
-  }
-
-  /* 手機小調整 */
-  @media (max-width:420px){
-    #days-number{ font-size:56px; }
-    .label{ font-size:24px; }
-  }
-</style>
+    <title>Countdown Timer</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #CDE1EB;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .countdown-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 0.7cm;
+        }
+        #countdown {
+            font-size: 80px;
+            font-weight: bold;
+            color: #FFC000;
+        }
+        .labels {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 80px;
+        }
+        #days, #toGo {
+            font-size: 30px;
+            text-align: center;
+        }
+        #days {
+            color: #FFC000;
+        }
+        #toGo {
+            color: #F7F7F7;
+        }
+        #subtitle {
+            font-size: 16px;
+            color: #183A68;
+            text-align: center;
+            margin-top: 0.3cm;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="wrap" aria-label="Days countdown">
-      <div id="days-number">0</div>
-      <div class="labels">
-        <div id="days-label" class="label">DAYS</div>
-        <div id="to-go" class="label">TO GO</div>
-      </div>
+    <div class="countdown-container">
+        <div id="countdown"></div>
+        <div class="labels">
+            <div id="days">DAYS</div>
+            <div id="toGo">TO GO</div>
+        </div>
+    </div>
+    <div id="subtitle">
+        <div>We're counting down to</div>
+        <div>Onshore substation energized</div>
+    </div>
+
+    <script>
+        const targetDate = new Date("2026-08-15T00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown").innerHTML = "Event Started!";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            document.getElementById("countdown").innerHTML = days;
+        }
+
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
